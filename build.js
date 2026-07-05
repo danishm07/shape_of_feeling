@@ -279,6 +279,13 @@ function build() {
     copyRecursive(DIAGRAMS_SRC, DIAGRAMS_DEST);
   }
 
+  for (const heroSrc of [path.join(ROOT, 'repin_ivan.jpg'), path.join(SRC, 'repin_ivan.jpg')]) {
+    if (fs.existsSync(heroSrc)) {
+      fs.copyFileSync(heroSrc, path.join(DOCS, 'repin_ivan.jpg'));
+      break;
+    }
+  }
+
   console.log('');
   console.log('✓ Build complete.');
   console.log('  Output: docs/index.html');

@@ -269,9 +269,39 @@ hr {
   font-size: 0.68rem;
   font-style: italic;
   color: var(--muted);
-  margin: 0;
+  margin: 0 0 2rem;
   line-height: 1.45;
   text-align: center;
+}
+
+/* ── Hero image ── */
+
+.hero {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  border: none;
+}
+
+.hero figcaption {
+  font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+  font-size: 0.68rem;
+  font-style: italic;
+  color: var(--muted);
+  text-align: center;
+  margin: 0.6rem 0 0;
+  line-height: 1.45;
+}
+
+.hero figcaption em {
+  font-style: italic;
 }
 
 @media (max-width: 940px) {
