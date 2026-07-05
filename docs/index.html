@@ -156,8 +156,9 @@
 </li>
 </ol>
 <p> </p>
-<p>The metric. To quantify this across the dataset, we used a strict top-1 comparison: at each layer, did the two sentences in a pair predict the same top token or not. We averaged this across the 20 sentence pairs in each concept pairing to get a single divergence rate per pair, per layer. </p>
-<p>This is designed to be an &quot;un-refined&quot; metric. A binary top-1 comparison doesn&#39;t capture partial similarity across the full vocabulary distribution, and KL divergence or cosine similarity over the full logit vectors would be more rigorous. We chose top-1 specifically for its interpretability: it grounds the measurement in a concrete, observable thing the model is prioritizing at that depth, rather than an abstract distributional distance. </p>
+<h3>The metric. </h3> 
+<p>To quantify this across the dataset, we used a strict top-1 comparison: at each layer, did the two sentences in a pair predict the same top token or not. We averaged this across the 20 sentence pairs in each concept pairing to get a single divergence rate per pair, per layer. </p>
+<p>This is designed to be an &quot;un-refined&quot; metric. A binary top-1 comparison doesn&#39;t capture partial similarity across the full vocabulary distribution, and KL divergence or cosine similarity over the full logit vectors would be more rigorous. We chose top-1 specifically for its interpretability, as it grounds the measurement in a concrete, observable thing the model is prioritizing at that depth rather than an abstract distributional distance. </p>
 <h2>4. Phase 4: Results, Corrected</h2>
 <h3>The qualitative signal.</h3>
 <p>At layer 12 - roughly the midpoint of Gemma-2-2B&#39;s 26 layers, and also within what&#39;s generally considered the model&#39;s semantic processing phase - the model&#39;s top predictions at the emotion token position are pretty interesting: </p>
@@ -275,12 +276,11 @@
 <p>We used GemmaScope (Lieberum et al., 2024), a sparse autoencoder pretrained for Gemma-2-2B and released by DeepMind, accessed through SAELens. We tested layers 12, 16, and 20, following Shu et al. (2026)&#39;s three-phase model of emotion processing, where layer 12 is roughly semantic, layer 16 a transition, and layer 20 emotion-specific. </p>
 <h3>Filtering 16,384 candidates down to something testable</h3>
 <p>Three layers, 16,384 features each, means roughly 49,000 individual feature-checks, which was.... far too many to test by steering one at a time. We needed a cheap, automatic way to narrow that pool before spending any real compute on causal verification. </p>
-<h3>For a feature i and a sentence set S, then, define:</h3>
+<p>For a feature i and a sentence set S, then, define:</p>
 <div class="math-display">$$P_S(i) = \text{fraction of sentences in } S \text{ where feature } i \text{ fires at all}$$</div>
-
-
-<p> </p>
-<p>(max-pooled across token positions, with the BOS token and padding excluded). From there, four numbers per feature: </p>
+<div>(max-pooled across token positions, with the BOS token and padding excluded). </div>
+<p> </p>
+<p>From there, four numbers per feature: </p>
 <ul>
 <li>$\text{differential}(i) = P_{target}(i) - P_{neutral}(i)$ 
 </li>
@@ -290,7 +290,7 @@
 <p>A feature survives only if it clears four thresholds: minimum target firing rate, a maximum neutral firing rate, a minimum differential, and a minimum dominance. This was our own construction to try and narrow down the results based on common discrepancies that kept coming up.  </p>
 <h3>The filter&#39;s four checks, and why they weren&#39;t enough</h3>
 <p>Each of the four checks above was built to rule out one specific way a feature could look promising without actually meaning anything: a feature that fires on nearly everything (caught by the target/neutral split), a feature with no real gap between target and baseline (caught by differential), a feature that&#39;s just a generic &quot;this is emotional&quot; detector firing equally across several different emotions (caught by dominance). Each rule answers a real failure mode. </p>
-<p>Running this against guilt, dread, and relief across all three layers, 502 features survived roughly 49,000 checked,  a real result, but barely narrower than picking at random. The four checks, individually reasonable, weren&#39;t enough together: they can only measure statistical association with how sentences happen to be labeled, not whether a feature tracks the underlying concept those labels are pointing at. </p>
+<p>Running this against guilt, dread, and relief across all three layers, 502 features survived, and roughly 49,000 were checked. This was a real result, but barely narrower than picking at random. The four checks, individually reasonable, weren&#39;t enough together: they can only measure statistical association with how sentences happen to be labeled, not whether a feature tracks the underlying concept those labels are pointing at. </p>
 <p>To really believe this we had to confirm this directly. Running a Pearson correlation across all surviving guilt candidates surfaced two features, 12579 and 13615, correlating at roughly 0.74, and this seemed high enough to look like a real, paired relationship. Pulling each feature&#39;s actual top activating tokens from Neuronpedia (the real words from real text that make a feature fire most strongly, independent of whatever summary label sits on top of it), told a different story: </p>
 <table>
 <thead>
