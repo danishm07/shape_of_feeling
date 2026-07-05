@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+DATA TRACE (diagram_06_units_bug.svg) — single idea: initial μ values (4–32) sit below
+10% of the residual-stream norm; corrected values (50–300) occupy a meaningful share.
+Source: diagram_jsons/diagram_06_units_bug.json
+
+  norm = 486                         -> residual_stream_norms.layer_16
+  broken μ + ρ%  (4 pts)             -> all_initial_mu_values_tested.mu_values, .rho_as_percent
+  corrected μ + ρ% (4 pts)           -> all_corrected_mu_values_tested.mu_values, .rho_as_percent
+  accent on μ=200 only (41.2%)       -> corrected_attempt.mu, all_corrected_mu_values_tested[2]
+  axis 0–70%                         -> spans full tested range with margin
+-->
+<svg width="920" height="228" viewBox="0 0 920 228" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400&amp;family=Inter:wght@400;500;600&amp;display=swap');
+    .bg   { fill: #fffff8; }
+    .ctx  { font-family: 'EB Garamond', serif; font-style: italic; font-size: 13px; fill: #555555; }
+    .ctx-n{ font-family: 'Inter', sans-serif; font-size: 12px; fill: #111111; }
+    .tick { font-family: 'Inter', sans-serif; font-size: 12px; fill: #555555; }
+    .mu   { font-family: 'Inter', sans-serif; font-size: 12px; fill: #555555; }
+    .mu-a { font-family: 'Inter', sans-serif; font-size: 12px; fill: #B22222; font-weight: 600; }
+    .key  { font-family: 'EB Garamond', serif; font-style: italic; font-size: 12px; fill: #555555; }
+    .lead { stroke: #cccccc; stroke-width: 1; }
+  </style>
+  <rect class="bg" x="0" y="0" width="920" height="228"/>
+
+  <!-- top-left context -->
+  <text class="ctx" x="48" y="30">layer 16 · residual-stream norm = <tspan class="ctx-n">486</tspan></text>
+  <text class="ctx" x="48" y="52">μ as % of norm at layer 16</text>
+  <circle cx="48" cy="72" r="4" fill="#fffff8" stroke="#555555" stroke-width="1.5"/>
+  <text class="key" x="58" y="76">initial μ tested</text>
+  <circle cx="168" cy="72" r="4" fill="#555555"/>
+  <text class="key" x="178" y="76">corrected μ tested</text>
+
+  <!-- axis: x=100 → 0%, x=860 → 70% -->
+  <line x1="100" y1="158" x2="860" y2="158" stroke="#111111" stroke-width="1"/>
+
+  <g stroke="#cccccc" stroke-width="1">
+    <line x1="100"   y1="154" x2="100"   y2="162"/>
+    <line x1="317.1" y1="154" x2="317.1" y2="162"/>
+    <line x1="534.3" y1="154" x2="534.3" y2="162"/>
+    <line x1="751.4" y1="154" x2="751.4" y2="162"/>
+    <line x1="860"   y1="154" x2="860"   y2="162"/>
+  </g>
+  <g class="tick" text-anchor="middle">
+    <text x="100"   y="178">0%</text>
+    <text x="317.1" y="178">20%</text>
+    <text x="534.3" y="178">40%</text>
+    <text x="751.4" y="178">60%</text>
+    <text x="860"   y="178">70%</text>
+  </g>
+
+  <!-- initial μ: 4→0.8%, 8→1.6%, 16→3.3%, 32→6.6% -->
+  <circle cx="108.7" cy="158" r="4" fill="#fffff8" stroke="#555555" stroke-width="1.5"/>
+  <circle cx="117.4" cy="158" r="4" fill="#fffff8" stroke="#555555" stroke-width="1.5"/>
+  <circle cx="135.8" cy="158" r="4" fill="#fffff8" stroke="#555555" stroke-width="1.5"/>
+  <circle cx="171.7" cy="158" r="4" fill="#fffff8" stroke="#555555" stroke-width="1.5"/>
+  <line class="lead" x1="108.7" y1="158" x2="108.7" y2="128"/>
+  <line class="lead" x1="117.4" y1="158" x2="117.4" y2="138"/>
+  <line class="lead" x1="135.8" y1="158" x2="135.8" y2="128"/>
+  <line class="lead" x1="171.7" y1="158" x2="171.7" y2="138"/>
+  <text class="mu" x="104" y="122" text-anchor="end">4</text>
+  <text class="mu" x="122" y="132" text-anchor="start">8</text>
+  <text class="mu" x="135.8" y="122" text-anchor="middle">16</text>
+  <text class="mu" x="171.7" y="132" text-anchor="middle">32</text>
+
+  <!-- corrected μ: 50→10.3%, 100→20.6%, 200→41.2%, 300→61.7% -->
+  <circle cx="211.8" cy="158" r="4" fill="#555555"/>
+  <circle cx="323.7" cy="158" r="4" fill="#555555"/>
+  <circle cx="547.3" cy="158" r="5" fill="#B22222"/>
+  <circle cx="769.9" cy="158" r="4" fill="#555555"/>
+  <line class="lead" x1="211.8" y1="158" x2="211.8" y2="128"/>
+  <line class="lead" x1="323.7" y1="158" x2="323.7" y2="138"/>
+  <line class="lead" x1="547.3" y1="158" x2="547.3" y2="122"/>
+  <line class="lead" x1="769.9" y1="158" x2="769.9" y2="138"/>
+  <text class="mu"   x="211.8" y="122" text-anchor="middle">50</text>
+  <text class="mu"   x="323.7" y="132" text-anchor="middle">100</text>
+  <text class="mu-a" x="547.3" y="116" text-anchor="middle">200</text>
+  <text class="mu"   x="769.9" y="132" text-anchor="middle">300</text>
+</svg>

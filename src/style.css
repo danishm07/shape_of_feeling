@@ -1,0 +1,301 @@
+/* SaeLit — constraint-as-aesthetic design system */
+
+:root {
+  --muted: #7A766C;
+  --measure: 720px;
+  --header-measure: 920px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 2.5rem 1.25rem 4rem;
+  background-color: #F7F5F0;
+  color: #2A2A2A;
+  font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+  line-height: 1.7;
+}
+
+main {
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+/* ── Typography ── */
+
+h1, h2, h3, h4, h5, h6 {
+  color: #111111;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-top: 0;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 1.45rem;
+  margin-top: 3rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #7A766C;
+}
+
+main > h2:first-child {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+}
+
+h3 {
+  font-size: 1.15rem;
+  margin-top: 1.75rem;
+  color: #111111;
+}
+
+p {
+  margin: 0 0 1.1rem;
+}
+
+p:empty {
+  display: none;
+}
+
+ol {
+  margin: 0 0 1.1rem;
+  padding-left: 1.5rem;
+}
+
+ol li {
+  margin-bottom: 0.5rem;
+}
+
+strong {
+  color: #111111;
+  font-weight: 600;
+}
+
+em {
+  font-style: italic;
+}
+
+a {
+  color: #111111;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: #7A766C;
+}
+
+/* ── Metadata / code font ── */
+
+code,
+pre,
+.katex,
+mjx-container {
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  font-size: 0.85em;
+}
+
+code {
+  background-color: #EBE7DD;
+  padding: 0.1em 0.35em;
+}
+
+pre {
+  background-color: #EBE7DD;
+  border: 1px solid #7A766C;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  line-height: 1.5;
+  margin: 0 0 1.25rem;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.8em;
+}
+
+/* ── Blockquotes ── */
+
+blockquote {
+  margin: 0 0 1.25rem;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid #2A2A2A;
+  color: #2A2A2A;
+  font-style: italic;
+}
+
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Lists ── */
+
+ul, ol {
+  margin: 0 0 1.1rem;
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.35rem;
+}
+
+li > ul,
+li > ol {
+  margin-top: 0.35rem;
+  margin-bottom: 0;
+}
+
+/* ── Tables ── */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1.5rem;
+  font-size: 0.92rem;
+}
+
+thead th {
+  color: #111111;
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 2px solid #7A766C;
+  padding: 0.5rem 0.75rem 0.5rem 0;
+}
+
+tbody td {
+  text-align: left;
+  border-bottom: 1px solid #7A766C;
+  padding: 0.45rem 0.75rem 0.45rem 0;
+  vertical-align: top;
+}
+
+/* Monospace for numeric / tabular data cells */
+tbody td:nth-child(n+2),
+thead th:nth-child(n+2) {
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  font-size: 0.82rem;
+}
+
+/* First column (labels) stays in prose serif */
+tbody td:first-child,
+thead th:first-child {
+  font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+}
+
+/* ── Images & diagram embeds ── */
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.25rem 0 1.5rem;
+  border: 1px solid #7A766C;
+}
+
+iframe {
+  display: block;
+  width: 100%;
+  border: 1px solid #7A766C;
+  margin: 1.25rem 0 1.5rem;
+  background-color: #F7F5F0;
+}
+
+.diagram-embed {
+  margin: 1.25rem 0 1.5rem;
+}
+
+.diagram-embed iframe {
+  margin: 0;
+}
+
+/* ── Math ── */
+
+.math-display {
+  overflow-x: auto;
+  margin: 1rem 0 1.25rem;
+}
+
+/* ── Horizontal rule ── */
+
+hr {
+  border: none;
+  border-top: 1px solid #7A766C;
+  margin: 2rem 0;
+}
+
+/* ── Site header ── */
+
+.site-header {
+  max-width: var(--header-measure);
+  margin: 0 auto 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #7A766C;
+}
+
+.site-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.meta {
+  font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+  font-size: 0.92rem;
+  color: var(--muted);
+  margin: 0 0 0.75rem;
+  text-align: center;
+}
+
+.editorial-note {
+  font-size: 0.68rem;
+  font-style: italic;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.45;
+  text-align: center;
+}
+
+@media (max-width: 940px) {
+  .site-header h1 {
+    white-space: normal;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+}
+
+/* ── References section ── */
+
+.references {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  margin-top: 0.5rem;
+}
+
+.references p.reference {
+  margin: 0 0 0.65rem;
+  font-size: inherit;
+  font-family: "EB Garamond", Garamond, "Times New Roman", serif;
+}
+
+.references a {
+  font-size: inherit;
+  font-family: inherit;
+}

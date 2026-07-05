@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!--
+DATA TRACE (diagram_01_caa_heatmap.html) — single idea: all 8 CAA emotion vectors land
+close together (0.733–1.000 cosine similarity), not separated as distinct emotions would require.
+Source: diagram_jsons/diagram_01_caa_heatmap.json
+
+  8 emotion labels           -> emotions[]
+  64 matrix cells            -> matrix[row][col] for each pair
+  color scale domain         -> 0.0 to 1.0 (full cosine range; same sequential palette)
+  diagonal cells (1.000)     -> matrix[e][e]; rendered muted (#e8e4dc), not as findings
+  hover values (3 decimals)  -> same matrix keys, formatted toFixed(3)
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Diagram 1 — CAA Heatmap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400&family=Inter:wght@400;500;600&display=swap');
+  html, body { margin: 0; padding: 0; background: #fffff8; }
+  svg { display: block; }
+  #tip {
+    position: fixed; display: none; pointer-events: none;
+    background: #fffff8; border: 1px solid #cccccc; padding: 6px 10px;
+    font-family: 'Inter', sans-serif; font-size: 12px; color: #111111;
+    white-space: nowrap; z-index: 10;
+  }
+  .hit { cursor: pointer; }
+</style>
+</head>
+<body>
+<div id="tip"></div>
+<svg width="620" height="560" viewBox="0 0 620 560" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="620" height="560" fill="#fffff8"/>
+
+  <text x="118" y="152" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="end">joy</text>
+  <text x="118" y="196" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="end">anger</text>
+  <text x="118" y="240" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="end">sadness</text>
+  <text x="118" y="284" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="end">dread</text>
+  <text x="118" y="328" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="end">awe</text>
+  <text x="118" y="372" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="end">nostalgia</text>
+  <text x="118" y="416" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="end">guilt</text>
+  <text x="118" y="460" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="end">hope</text>
+
+  <text x="150" y="108" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="middle" transform="rotate(-45 150 108)">joy</text>
+  <text x="194" y="108" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="middle" transform="rotate(-45 194 108)">anger</text>
+  <text x="238" y="108" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="middle" transform="rotate(-45 238 108)">sadness</text>
+  <text x="282" y="108" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="middle" transform="rotate(-45 282 108)">dread</text>
+  <text x="326" y="108" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="middle" transform="rotate(-45 326 108)">awe</text>
+  <text x="370" y="108" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="middle" transform="rotate(-45 370 108)">nostalgia</text>
+  <text x="414" y="108" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="middle" transform="rotate(-45 414 108)">guilt</text>
+  <text x="458" y="108" font-family="EB Garamond, serif" font-size="13" fill="#555555" text-anchor="middle" transform="rotate(-45 458 108)">hope</text>
+
+  <g id="cells">
+  <rect x="130" y="130" width="40" height="40" fill="#e8e4dc" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="174" y="130" width="40" height="40" fill="#343432" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="218" y="130" width="40" height="40" fill="#282726" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="262" y="130" width="40" height="40" fill="#232221" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="306" y="130" width="40" height="40" fill="#202020" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="350" y="130" width="40" height="40" fill="#232322" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="394" y="130" width="40" height="40" fill="#252524" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="438" y="130" width="40" height="40" fill="#252524" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="130" y="174" width="40" height="40" fill="#343432" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="174" y="174" width="40" height="40" fill="#e8e4dc" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="218" y="174" width="40" height="40" fill="#2d2c2b" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="262" y="174" width="40" height="40" fill="#3e3d3c" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="306" y="174" width="40" height="40" fill="#444341" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="350" y="174" width="40" height="40" fill="#4c4a48" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="394" y="174" width="40" height="40" fill="#4a4846" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="438" y="174" width="40" height="40" fill="#4d4c4a" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="130" y="218" width="40" height="40" fill="#282726" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="174" y="218" width="40" height="40" fill="#2d2c2b" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="218" y="218" width="40" height="40" fill="#e8e4dc" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="262" y="218" width="40" height="40" fill="#292827" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="306" y="218" width="40" height="40" fill="#2c2b2a" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="350" y="218" width="40" height="40" fill="#31302f" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="394" y="218" width="40" height="40" fill="#31312f" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="438" y="218" width="40" height="40" fill="#343332" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="130" y="262" width="40" height="40" fill="#232221" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="174" y="262" width="40" height="40" fill="#3e3d3c" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="218" y="262" width="40" height="40" fill="#292827" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="262" y="262" width="40" height="40" fill="#e8e4dc" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="306" y="262" width="40" height="40" fill="#151514" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="350" y="262" width="40" height="40" fill="#181818" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="394" y="262" width="40" height="40" fill="#1b1a1a" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="438" y="262" width="40" height="40" fill="#1a1a1a" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="130" y="306" width="40" height="40" fill="#202020" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="174" y="306" width="40" height="40" fill="#444341" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="218" y="306" width="40" height="40" fill="#2c2b2a" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="262" y="306" width="40" height="40" fill="#151514" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="306" y="306" width="40" height="40" fill="#e8e4dc" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="350" y="306" width="40" height="40" fill="#141414" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="394" y="306" width="40" height="40" fill="#171717" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="438" y="306" width="40" height="40" fill="#171716" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="130" y="350" width="40" height="40" fill="#232322" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="174" y="350" width="40" height="40" fill="#4c4a48" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="218" y="350" width="40" height="40" fill="#31302f" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="262" y="350" width="40" height="40" fill="#181818" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="306" y="350" width="40" height="40" fill="#141414" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="350" y="350" width="40" height="40" fill="#e8e4dc" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="394" y="350" width="40" height="40" fill="#141414" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="438" y="350" width="40" height="40" fill="#151514" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="130" y="394" width="40" height="40" fill="#252524" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="174" y="394" width="40" height="40" fill="#4a4846" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="218" y="394" width="40" height="40" fill="#31312f" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="262" y="394" width="40" height="40" fill="#1b1a1a" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="306" y="394" width="40" height="40" fill="#171717" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="350" y="394" width="40" height="40" fill="#141414" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="394" y="394" width="40" height="40" fill="#e8e4dc" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="438" y="394" width="40" height="40" fill="#141414" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="130" y="438" width="40" height="40" fill="#252524" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="174" y="438" width="40" height="40" fill="#4d4c4a" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="218" y="438" width="40" height="40" fill="#343332" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="262" y="438" width="40" height="40" fill="#1a1a1a" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="306" y="438" width="40" height="40" fill="#171716" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="350" y="438" width="40" height="40" fill="#151514" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="394" y="438" width="40" height="40" fill="#141414" stroke="#cccccc" stroke-width="0.5"/>
+  <rect x="438" y="438" width="40" height="40" fill="#e8e4dc" stroke="#cccccc" stroke-width="0.5"/>
+  </g>
+  <g id="hits">
+  <rect class="hit" x="130" y="130" width="40" height="40" fill="transparent" onmouseover="showTip(event,'joy × joy · 1.000')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="174" y="130" width="40" height="40" fill="transparent" onmouseover="showTip(event,'joy × anger · 0.843')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="218" y="130" width="40" height="40" fill="transparent" onmouseover="showTip(event,'joy × sadness · 0.898')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="262" y="130" width="40" height="40" fill="transparent" onmouseover="showTip(event,'joy × dread · 0.921')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="306" y="130" width="40" height="40" fill="transparent" onmouseover="showTip(event,'joy × awe · 0.930')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="350" y="130" width="40" height="40" fill="transparent" onmouseover="showTip(event,'joy × nostalgia · 0.919')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="394" y="130" width="40" height="40" fill="transparent" onmouseover="showTip(event,'joy × guilt · 0.909')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="438" y="130" width="40" height="40" fill="transparent" onmouseover="showTip(event,'joy × hope · 0.909')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="130" y="174" width="40" height="40" fill="transparent" onmouseover="showTip(event,'anger × joy · 0.843')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="174" y="174" width="40" height="40" fill="transparent" onmouseover="showTip(event,'anger × anger · 1.000')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="218" y="174" width="40" height="40" fill="transparent" onmouseover="showTip(event,'anger × sadness · 0.875')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="262" y="174" width="40" height="40" fill="transparent" onmouseover="showTip(event,'anger × dread · 0.799')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="306" y="174" width="40" height="40" fill="transparent" onmouseover="showTip(event,'anger × awe · 0.775')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="350" y="174" width="40" height="40" fill="transparent" onmouseover="showTip(event,'anger × nostalgia · 0.741')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="394" y="174" width="40" height="40" fill="transparent" onmouseover="showTip(event,'anger × guilt · 0.749')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="438" y="174" width="40" height="40" fill="transparent" onmouseover="showTip(event,'anger × hope · 0.733')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="130" y="218" width="40" height="40" fill="transparent" onmouseover="showTip(event,'sadness × joy · 0.898')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="174" y="218" width="40" height="40" fill="transparent" onmouseover="showTip(event,'sadness × anger · 0.875')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="218" y="218" width="40" height="40" fill="transparent" onmouseover="showTip(event,'sadness × sadness · 1.000')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="262" y="218" width="40" height="40" fill="transparent" onmouseover="showTip(event,'sadness × dread · 0.894')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="306" y="218" width="40" height="40" fill="transparent" onmouseover="showTip(event,'sadness × awe · 0.880')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="350" y="218" width="40" height="40" fill="transparent" onmouseover="showTip(event,'sadness × nostalgia · 0.857')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="394" y="218" width="40" height="40" fill="transparent" onmouseover="showTip(event,'sadness × guilt · 0.856')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="438" y="218" width="40" height="40" fill="transparent" onmouseover="showTip(event,'sadness × hope · 0.846')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="130" y="262" width="40" height="40" fill="transparent" onmouseover="showTip(event,'dread × joy · 0.921')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="174" y="262" width="40" height="40" fill="transparent" onmouseover="showTip(event,'dread × anger · 0.799')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="218" y="262" width="40" height="40" fill="transparent" onmouseover="showTip(event,'dread × sadness · 0.894')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="262" y="262" width="40" height="40" fill="transparent" onmouseover="showTip(event,'dread × dread · 1.000')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="306" y="262" width="40" height="40" fill="transparent" onmouseover="showTip(event,'dread × awe · 0.982')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="350" y="262" width="40" height="40" fill="transparent" onmouseover="showTip(event,'dread × nostalgia · 0.965')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="394" y="262" width="40" height="40" fill="transparent" onmouseover="showTip(event,'dread × guilt · 0.956')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="438" y="262" width="40" height="40" fill="transparent" onmouseover="showTip(event,'dread × hope · 0.957')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="130" y="306" width="40" height="40" fill="transparent" onmouseover="showTip(event,'awe × joy · 0.930')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="174" y="306" width="40" height="40" fill="transparent" onmouseover="showTip(event,'awe × anger · 0.775')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="218" y="306" width="40" height="40" fill="transparent" onmouseover="showTip(event,'awe × sadness · 0.880')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="262" y="306" width="40" height="40" fill="transparent" onmouseover="showTip(event,'awe × dread · 0.982')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="306" y="306" width="40" height="40" fill="transparent" onmouseover="showTip(event,'awe × awe · 1.000')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="350" y="306" width="40" height="40" fill="transparent" onmouseover="showTip(event,'awe × nostalgia · 0.983')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="394" y="306" width="40" height="40" fill="transparent" onmouseover="showTip(event,'awe × guilt · 0.971')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="438" y="306" width="40" height="40" fill="transparent" onmouseover="showTip(event,'awe × hope · 0.973')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="130" y="350" width="40" height="40" fill="transparent" onmouseover="showTip(event,'nostalgia × joy · 0.919')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="174" y="350" width="40" height="40" fill="transparent" onmouseover="showTip(event,'nostalgia × anger · 0.741')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="218" y="350" width="40" height="40" fill="transparent" onmouseover="showTip(event,'nostalgia × sadness · 0.857')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="262" y="350" width="40" height="40" fill="transparent" onmouseover="showTip(event,'nostalgia × dread · 0.965')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="306" y="350" width="40" height="40" fill="transparent" onmouseover="showTip(event,'nostalgia × awe · 0.983')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="350" y="350" width="40" height="40" fill="transparent" onmouseover="showTip(event,'nostalgia × nostalgia · 1.000')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="394" y="350" width="40" height="40" fill="transparent" onmouseover="showTip(event,'nostalgia × guilt · 0.984')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="438" y="350" width="40" height="40" fill="transparent" onmouseover="showTip(event,'nostalgia × hope · 0.982')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="130" y="394" width="40" height="40" fill="transparent" onmouseover="showTip(event,'guilt × joy · 0.909')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="174" y="394" width="40" height="40" fill="transparent" onmouseover="showTip(event,'guilt × anger · 0.749')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="218" y="394" width="40" height="40" fill="transparent" onmouseover="showTip(event,'guilt × sadness · 0.856')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="262" y="394" width="40" height="40" fill="transparent" onmouseover="showTip(event,'guilt × dread · 0.956')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="306" y="394" width="40" height="40" fill="transparent" onmouseover="showTip(event,'guilt × awe · 0.971')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="350" y="394" width="40" height="40" fill="transparent" onmouseover="showTip(event,'guilt × nostalgia · 0.984')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="394" y="394" width="40" height="40" fill="transparent" onmouseover="showTip(event,'guilt × guilt · 1.000')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="438" y="394" width="40" height="40" fill="transparent" onmouseover="showTip(event,'guilt × hope · 0.986')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="130" y="438" width="40" height="40" fill="transparent" onmouseover="showTip(event,'hope × joy · 0.909')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="174" y="438" width="40" height="40" fill="transparent" onmouseover="showTip(event,'hope × anger · 0.733')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="218" y="438" width="40" height="40" fill="transparent" onmouseover="showTip(event,'hope × sadness · 0.846')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="262" y="438" width="40" height="40" fill="transparent" onmouseover="showTip(event,'hope × dread · 0.957')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="306" y="438" width="40" height="40" fill="transparent" onmouseover="showTip(event,'hope × awe · 0.973')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="350" y="438" width="40" height="40" fill="transparent" onmouseover="showTip(event,'hope × nostalgia · 0.982')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="394" y="438" width="40" height="40" fill="transparent" onmouseover="showTip(event,'hope × guilt · 0.986')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="438" y="438" width="40" height="40" fill="transparent" onmouseover="showTip(event,'hope × hope · 1.000')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  </g>
+
+  <defs>
+    <linearGradient id="cbar" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#f5f0e8"/>
+      <stop offset="100%" stop-color="#111111"/>
+    </linearGradient>
+  </defs>
+  <rect x="520" y="130" width="18" height="348" fill="url(#cbar)" stroke="#cccccc" stroke-width="0.5"/>
+  <text x="548" y="134" font-family="Inter, sans-serif" font-size="12" fill="#111111">1.00</text>
+  <text x="548" y="221" font-family="Inter, sans-serif" font-size="12" fill="#555555">0.75</text>
+  <text x="548" y="308" font-family="Inter, sans-serif" font-size="12" fill="#555555">0.50</text>
+  <text x="548" y="395" font-family="Inter, sans-serif" font-size="12" fill="#555555">0.25</text>
+  <text x="548" y="478" font-family="Inter, sans-serif" font-size="12" fill="#111111">0.00</text>
+
+  <text x="529" y="500" font-family="EB Garamond, serif" font-style="italic" font-size="12" fill="#555555" text-anchor="middle">cosine</text>
+</svg>
+<script>
+  function showTip(evt, text) {
+    var tip = document.getElementById('tip');
+    tip.textContent = text;
+    tip.style.left = (evt.clientX + 14) + 'px';
+    tip.style.top = (evt.clientY + 14) + 'px';
+    tip.style.display = 'block';
+  }
+  function moveTip(evt) {
+    var tip = document.getElementById('tip');
+    if (tip.style.display === 'block') {
+      tip.style.left = (evt.clientX + 14) + 'px';
+      tip.style.top = (evt.clientY + 14) + 'px';
+    }
+  }
+  function hideTip() { document.getElementById('tip').style.display = 'none'; }
+</script>
+</body>
+</html>

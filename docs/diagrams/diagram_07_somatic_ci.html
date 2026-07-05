@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--
+DATA TRACE (diagram_07_somatic_ci.html) — single idea: only feature 11883 has non-overlapping
+95% CIs for guilt-somatic vs shame-somatic firing rates; all other features overlap.
+Source: diagram_jsons/diagram_07_somatic_ci.json
+
+  6 feature rows             -> features[*].feature_id
+  guilt CI bounds + midpoints -> features[*].guilt_ci[0], [1], midpoint computed
+  shame CI bounds + midpoints -> features[*].shame_ci[0], [1], midpoint computed
+  accent on 11883 CIs only  -> features[0].overlap === false
+  hover labels              -> features[*].label, guilt_ci, shame_ci
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Diagram 7 — Somatic CI</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400&family=Inter:wght@400;500&display=swap');
+  html, body { margin: 0; padding: 0; background: #fffff8; }
+  svg { display: block; }
+  #tip {
+    position: fixed; display: none; pointer-events: none;
+    background: #fffff8; border: 1px solid #cccccc; padding: 6px 10px;
+    font-family: 'Inter', sans-serif; font-size: 12px; color: #111111;
+    max-width: 320px; z-index: 10;
+  }
+  .hit { cursor: pointer; }
+</style>
+</head>
+<body>
+<div id="tip"></div>
+<svg width="680" height="464" viewBox="0 0 680 464" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="680" height="464" fill="#fffff8"/>
+
+  <text x="380.0" y="436" font-family="EB Garamond, serif" font-style="italic" font-size="13" fill="#555555" text-anchor="middle">firing rate</text>
+  <text x="140.0" y="416" font-family="Inter, sans-serif" font-size="12" fill="#555555" text-anchor="middle">0.00</text>
+  <text x="260.0" y="416" font-family="Inter, sans-serif" font-size="12" fill="#555555" text-anchor="middle">0.25</text>
+  <text x="380.0" y="416" font-family="Inter, sans-serif" font-size="12" fill="#555555" text-anchor="middle">0.50</text>
+  <text x="500.0" y="416" font-family="Inter, sans-serif" font-size="12" fill="#555555" text-anchor="middle">0.75</text>
+  <text x="620.0" y="416" font-family="Inter, sans-serif" font-size="12" fill="#555555" text-anchor="middle">1.00</text>
+
+  <text x="128" y="44" font-family="EB Garamond, serif" font-style="italic" font-size="12" fill="#555555" text-anchor="end">upper = guilt-somatic</text>
+  <text x="128" y="58" font-family="EB Garamond, serif" font-style="italic" font-size="12" fill="#555555" text-anchor="end">lower = shame-somatic</text>
+
+  <g id="data">
+  <!-- feature 11883 -->
+  <text class="hit" x="128" y="88" font-family="Inter, sans-serif" font-size="12" fill="#555555" text-anchor="end" onmouseover="showTip(event,'apologies, requests for forgiveness')" onmousemove="moveTip(event)" onmouseout="hideTip()">11883</text>
+    <line x1="260.0" y1="76" x2="452.0" y2="76" stroke="#B22222" stroke-width="2.5"/>
+    <line x1="260.0" y1="71" x2="260.0" y2="81" stroke="#B22222" stroke-width="2.5"/>
+    <line x1="452.0" y1="71" x2="452.0" y2="81" stroke="#B22222" stroke-width="2.5"/>
+    <circle cx="356.0" cy="76" r="3.5" fill="#B22222"/>
+    <line x1="500.0" y1="92" x2="620.0" y2="92" stroke="#B22222" stroke-width="2.5"/>
+    <line x1="500.0" y1="87" x2="500.0" y2="97" stroke="#B22222" stroke-width="2.5"/>
+    <line x1="620.0" y1="87" x2="620.0" y2="97" stroke="#B22222" stroke-width="2.5"/>
+    <circle cx="560.0" cy="92" r="3.5" fill="#B22222"/>
+  <!-- feature 13305 -->
+  <text class="hit" x="128" y="144" font-family="Inter, sans-serif" font-size="12" fill="#555555" text-anchor="end" onmouseover="showTip(event,'remorse, requests for forgiveness')" onmousemove="moveTip(event)" onmouseout="hideTip()">13305</text>
+    <line x1="236.0" y1="132" x2="428.0" y2="132" stroke="#555555" stroke-width="1.5"/>
+    <line x1="236.0" y1="127" x2="236.0" y2="137" stroke="#555555" stroke-width="1.5"/>
+    <line x1="428.0" y1="127" x2="428.0" y2="137" stroke="#555555" stroke-width="1.5"/>
+    <circle cx="332.0" cy="132" r="3.5" fill="#555555"/>
+    <line x1="308.0" y1="148" x2="500.0" y2="148" stroke="#555555" stroke-width="1.5"/>
+    <line x1="308.0" y1="143" x2="308.0" y2="153" stroke="#555555" stroke-width="1.5"/>
+    <line x1="500.0" y1="143" x2="500.0" y2="153" stroke="#555555" stroke-width="1.5"/>
+    <circle cx="404.0" cy="148" r="3.5" fill="#555555"/>
+  <!-- feature 8567 -->
+  <text class="hit" x="128" y="200" font-family="Inter, sans-serif" font-size="12" fill="#555555" text-anchor="end" onmouseover="showTip(event,'regret, realization of mistakes')" onmousemove="moveTip(event)" onmouseout="hideTip()">8567</text>
+    <line x1="260.0" y1="188" x2="452.0" y2="188" stroke="#555555" stroke-width="1.5"/>
+    <line x1="260.0" y1="183" x2="260.0" y2="193" stroke="#555555" stroke-width="1.5"/>
+    <line x1="452.0" y1="183" x2="452.0" y2="193" stroke="#555555" stroke-width="1.5"/>
+    <circle cx="356.0" cy="188" r="3.5" fill="#555555"/>
+    <line x1="308.0" y1="204" x2="500.0" y2="204" stroke="#555555" stroke-width="1.5"/>
+    <line x1="308.0" y1="199" x2="308.0" y2="209" stroke="#555555" stroke-width="1.5"/>
+    <line x1="500.0" y1="199" x2="500.0" y2="209" stroke="#555555" stroke-width="1.5"/>
+    <circle cx="404.0" cy="204" r="3.5" fill="#555555"/>
+  <!-- feature 15551 -->
+  <text class="hit" x="128" y="256" font-family="Inter, sans-serif" font-size="12" fill="#555555" text-anchor="end" onmouseover="showTip(event,'reflection, hindsight (also: gratitude)')" onmousemove="moveTip(event)" onmouseout="hideTip()">15551</text>
+    <line x1="284.0" y1="244" x2="476.0" y2="244" stroke="#555555" stroke-width="1.5"/>
+    <line x1="284.0" y1="239" x2="284.0" y2="249" stroke="#555555" stroke-width="1.5"/>
+    <line x1="476.0" y1="239" x2="476.0" y2="249" stroke="#555555" stroke-width="1.5"/>
+    <circle cx="380.0" cy="244" r="3.5" fill="#555555"/>
+    <line x1="260.0" y1="260" x2="452.0" y2="260" stroke="#555555" stroke-width="1.5"/>
+    <line x1="260.0" y1="255" x2="260.0" y2="265" stroke="#555555" stroke-width="1.5"/>
+    <line x1="452.0" y1="255" x2="452.0" y2="265" stroke="#555555" stroke-width="1.5"/>
+    <circle cx="356.0" cy="260" r="3.5" fill="#555555"/>
+  <!-- feature 11182 -->
+  <text class="hit" x="128" y="312" font-family="Inter, sans-serif" font-size="12" fill="#555555" text-anchor="end" onmouseover="showTip(event,'legal proceedings, plea agreements')" onmousemove="moveTip(event)" onmouseout="hideTip()">11182</text>
+    <line x1="164.0" y1="300" x2="332.0" y2="300" stroke="#555555" stroke-width="1.5"/>
+    <line x1="164.0" y1="295" x2="164.0" y2="305" stroke="#555555" stroke-width="1.5"/>
+    <line x1="332.0" y1="295" x2="332.0" y2="305" stroke="#555555" stroke-width="1.5"/>
+    <circle cx="248.0" cy="300" r="3.5" fill="#555555"/>
+    <line x1="140.0" y1="316" x2="284.0" y2="316" stroke="#555555" stroke-width="1.5"/>
+    <line x1="140.0" y1="311" x2="140.0" y2="321" stroke="#555555" stroke-width="1.5"/>
+    <line x1="284.0" y1="311" x2="284.0" y2="321" stroke="#555555" stroke-width="1.5"/>
+    <circle cx="212.0" cy="316" r="3.5" fill="#555555"/>
+  <!-- feature 5932 -->
+  <text class="hit" x="128" y="368" font-family="Inter, sans-serif" font-size="12" fill="#555555" text-anchor="end" onmouseover="showTip(event,'transparency, honesty in communication')" onmousemove="moveTip(event)" onmouseout="hideTip()">5932</text>
+    <line x1="140.0" y1="356" x2="212.0" y2="356" stroke="#555555" stroke-width="1.5"/>
+    <line x1="140.0" y1="351" x2="140.0" y2="361" stroke="#555555" stroke-width="1.5"/>
+    <line x1="212.0" y1="351" x2="212.0" y2="361" stroke="#555555" stroke-width="1.5"/>
+    <circle cx="176.0" cy="356" r="3.5" fill="#555555"/>
+    <line x1="164.0" y1="372" x2="356.0" y2="372" stroke="#555555" stroke-width="1.5"/>
+    <line x1="164.0" y1="367" x2="164.0" y2="377" stroke="#555555" stroke-width="1.5"/>
+    <line x1="356.0" y1="367" x2="356.0" y2="377" stroke="#555555" stroke-width="1.5"/>
+    <circle cx="260.0" cy="372" r="3.5" fill="#555555"/>
+  </g>
+  <g id="hits">
+  <rect class="hit" x="260.0" y="66" width="192.0" height="20" fill="transparent" onmouseover="showTip(event,'guilt · 0.250 to 0.650')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="500.0" y="82" width="120.0" height="20" fill="transparent" onmouseover="showTip(event,'shame · 0.750 to 1.000')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="236.0" y="122" width="192.0" height="20" fill="transparent" onmouseover="showTip(event,'guilt · 0.200 to 0.600')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="308.0" y="138" width="192.0" height="20" fill="transparent" onmouseover="showTip(event,'shame · 0.350 to 0.750')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="260.0" y="178" width="192.0" height="20" fill="transparent" onmouseover="showTip(event,'guilt · 0.250 to 0.650')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="308.0" y="194" width="192.0" height="20" fill="transparent" onmouseover="showTip(event,'shame · 0.350 to 0.750')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="284.0" y="234" width="192.0" height="20" fill="transparent" onmouseover="showTip(event,'guilt · 0.300 to 0.700')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="260.0" y="250" width="192.0" height="20" fill="transparent" onmouseover="showTip(event,'shame · 0.250 to 0.650')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="164.0" y="290" width="168.0" height="20" fill="transparent" onmouseover="showTip(event,'guilt · 0.050 to 0.400')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="140.0" y="306" width="144.0" height="20" fill="transparent" onmouseover="showTip(event,'shame · 0.000 to 0.300')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="140.0" y="346" width="72.0" height="20" fill="transparent" onmouseover="showTip(event,'guilt · 0.000 to 0.150')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  <rect class="hit" x="164.0" y="362" width="192.0" height="20" fill="transparent" onmouseover="showTip(event,'shame · 0.050 to 0.450')" onmousemove="moveTip(event)" onmouseout="hideTip()"/>
+  </g>
+
+  <text x="140" y="452" font-family="EB Garamond, serif" font-style="italic" font-size="13" fill="#555555">Only feature 11883 separates guilt from shame; every other interval overlaps.</text>
+</svg>
+<script>
+  function showTip(evt, text) {
+    var tip = document.getElementById('tip');
+    tip.textContent = text;
+    tip.style.left = (evt.clientX + 14) + 'px';
+    tip.style.top = (evt.clientY + 14) + 'px';
+    tip.style.display = 'block';
+  }
+  function moveTip(evt) {
+    var tip = document.getElementById('tip');
+    if (tip.style.display === 'block') {
+      tip.style.left = (evt.clientX + 14) + 'px';
+      tip.style.top = (evt.clientY + 14) + 'px';
+    }
+  }
+  function hideTip() { document.getElementById('tip').style.display = 'none'; }
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+DATA TRACE (diagram_07b_steering_outcomes.svg) — single idea: of the 9 candidates that reached
+real causal steering, outcomes split verified/negative/inconclusive, independent of how strong
+the token match looked. Source: diagram_jsons/diagram_07b_steering_outcomes.json
+  legend counts 6/2/1            -> summary_counts.verified/negative/inconclusive
+  13305, 11883                   -> already_verified_before_this_batch[0],[1]
+                                     (no real_top_tokens field in this JSON for these two -> omitted, not invented)
+  06230,08567,15551,11182,05932,02746,14528 -> second_batch_candidates[*]
+                                     .feature_id, .layer, .claimed_label, .real_top_tokens, .outcome
+-->
+<svg width="860" height="730" viewBox="0 0 860 730" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&amp;family=Inter:wght@400;500&amp;display=swap');
+    .bg { fill: #fffff8; }
+    .legend { font-family: 'Inter', sans-serif; font-size: 12px; fill: #555555; }
+    .meta { font-family: 'Inter', sans-serif; font-size: 12px; fill: #555555; }
+    .claim { font-family: 'EB Garamond', serif; font-style: italic; fill: #111111; font-size: 14px; }
+    .tok { font-family: 'Inter', sans-serif; font-size: 11.5px; fill: #111111; }
+  </style>
+  <rect class="bg" x="0" y="0" width="860" height="730"/>
+
+  <!-- legend -->
+  <circle cx="56" cy="26" r="6" fill="#111111"/>
+  <text class="legend" x="70" y="30">verified (6)</text>
+  <circle cx="190" cy="26" r="6" fill="#fffff8" stroke="#111111" stroke-width="1.5"/>
+  <text class="legend" x="204" y="30">negative (2)</text>
+  <path d="M 330 20 A 6 6 0 0 0 330 32 Z" fill="#111111"/>
+  <circle cx="330" cy="26" r="6" fill="none" stroke="#111111" stroke-width="1.5"/>
+  <text class="legend" x="344" y="30">inconclusive (1)</text>
+  <line x1="40" y1="46" x2="820" y2="46" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 13305 — verified, no tokens in this JSON -->
+  <text class="meta" x="40" y="82">feature 13305 · layer 16</text>
+  <circle cx="820" cy="78" r="6" fill="#111111"/>
+  <text class="claim" x="40" y="104">expressions of remorse and requests for forgiveness</text>
+  <line x1="40" y1="116" x2="820" y2="116" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 11883 — verified, no tokens in this JSON -->
+  <text class="meta" x="40" y="138">feature 11883 · layer 20</text>
+  <circle cx="820" cy="134" r="6" fill="#111111"/>
+  <text class="claim" x="40" y="160">apologies and requests for forgiveness</text>
+  <line x1="40" y1="172" x2="820" y2="172" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 06230 — negative -->
+  <text class="meta" x="40" y="194">feature 06230 · layer 16</text>
+  <circle cx="820" cy="190" r="6" fill="#fffff8" stroke="#111111" stroke-width="1.5"/>
+  <text class="claim" x="40" y="216">references to psychological distress and mental health conditions</text>
+  <text class="tok" x="40" y="236">guilt, anxiety, self, Guilt, fears, perfection, perf, Anxiety</text>
+  <line x1="40" y1="248" x2="820" y2="248" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 08567 — verified -->
+  <text class="meta" x="40" y="270">feature 08567 · layer 12</text>
+  <circle cx="820" cy="266" r="6" fill="#111111"/>
+  <text class="claim" x="40" y="292">expressions of regret and realization of mistakes</text>
+  <text class="tok" x="40" y="312">regretted, regrets, regret, 后悔 (Chinese: regret), remorse, edit, later, оригіналу</text>
+  <line x1="40" y1="324" x2="820" y2="324" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 15551 — verified -->
+  <text class="meta" x="40" y="346">feature 15551 · layer 16</text>
+  <circle cx="820" cy="342" r="6" fill="#111111"/>
+  <text class="claim" x="40" y="368">phrases related to reflection and hindsight</text>
+  <text class="tok" x="40" y="388">hindsight, retrospect, regrets, regret, regretted, retrospec, Regret, Regret</text>
+  <line x1="40" y1="400" x2="820" y2="400" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 11182 — verified -->
+  <text class="meta" x="40" y="422">feature 11182 · layer 12</text>
+  <circle cx="820" cy="418" r="6" fill="#111111"/>
+  <text class="claim" x="40" y="444">phrases related to legal proceedings and plea agreements</text>
+  <text class="tok" x="40" y="464">acceptance, accepting, accepts, Acceptance, accept, voluntarily, surrender, accept</text>
+  <line x1="40" y1="476" x2="820" y2="476" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 05932 — verified -->
+  <text class="meta" x="40" y="498">feature 05932 · layer 12</text>
+  <circle cx="820" cy="494" r="6" fill="#111111"/>
+  <text class="claim" x="40" y="520">discussions about transparency and honesty in communication</text>
+  <text class="tok" x="40" y="540">disclosing, revealing, disclosure, disclose, transparency, disclosures, discloses, honesty</text>
+  <line x1="40" y1="552" x2="820" y2="552" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 02746 — negative -->
+  <text class="meta" x="40" y="574">feature 02746 · layer 20</text>
+  <circle cx="820" cy="570" r="6" fill="#fffff8" stroke="#111111" stroke-width="1.5"/>
+  <text class="claim" x="40" y="596">terms and concepts related to fraudulent activities, including various forms of fraud and deception</text>
+  <text class="tok" x="40" y="616">perpetrated, committed, honte (French: shame), onAttach, Prevention, danni, perpetuated, Detection</text>
+  <line x1="40" y1="628" x2="820" y2="628" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 14528 — inconclusive -->
+  <text class="meta" x="40" y="650">feature 14528 · layer 20</text>
+  <path d="M 820 644 A 6 6 0 0 0 820 656 Z" fill="#111111"/>
+  <circle cx="820" cy="650" r="6" fill="none" stroke="#111111" stroke-width="1.5"/>
+  <text class="claim" x="40" y="672">expressions of emotions, particularly feelings of guilt and sorrow</text>
+  <text class="tok" x="40" y="692">like, comfortable, Felt, secure, compelled, Feels, safe, secure</text>
+</svg>

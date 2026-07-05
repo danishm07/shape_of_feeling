@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+DATA TRACE (setup_box.svg) — reference card, not a chart. Every field below is a direct
+field-value pair from diagram_jsons/setup_box.json
+  MODEL                     -> fields.model
+  SAE                       -> fields.sae
+  HARDWARE                  -> fields.hardware
+  CORPUS — PHASE 2          -> fields.corpus_phase2
+  CORPUS — PHASE 8          -> fields.corpus_phase8
+  STEERING μ — INITIAL      -> fields.steering_mu_initial
+  STEERING μ — CORRECTED    -> fields.steering_mu_corrected
+-->
+<svg width="780" height="600" viewBox="0 0 780 600" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400&amp;family=Inter:wght@400;500&amp;display=swap');
+    .bg { fill: #fffff8; }
+    .label { font-family: 'EB Garamond', serif; font-style: italic; fill: #555555; font-size: 12px; letter-spacing: 0.5px; }
+    .val { font-family: 'EB Garamond', serif; fill: #111111; font-size: 16px; }
+    .val-muted { font-family: 'EB Garamond', serif; font-style: italic; fill: #555555; font-size: 13px; }
+    .num { font-family: 'Inter', sans-serif; fill: #111111; font-size: 15px; }
+  </style>
+  <rect class="bg" x="0" y="0" width="780" height="600"/>
+  <line x1="40" y1="20" x2="740" y2="20" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- MODEL -->
+  <text class="label" x="40" y="36">MODEL</text>
+  <text class="val" x="40" y="60">Gemma-2-2B (base), google/gemma-2-2b</text>
+  <text class="val" x="40" y="80">via HuggingFace</text>
+
+  <!-- SAE -->
+  <text class="label" x="40" y="108">SAE</text>
+  <text x="40" y="132"><tspan class="val">GemmaScope, layers </tspan><tspan class="num">12</tspan><tspan class="val">, </tspan><tspan class="num">16</tspan><tspan class="val">, and </tspan><tspan class="num">20</tspan></text>
+
+  <!-- HARDWARE -->
+  <text class="label" x="40" y="180">HARDWARE</text>
+  <text class="val" x="40" y="204">Single A100 GPU via Google Colab</text>
+
+  <!-- CORPUS — PHASE 2 -->
+  <text class="label" x="40" y="252">CORPUS — PHASE 2</text>
+  <text x="40" y="276"><tspan class="num">160</tspan><tspan class="val"> sentences total — </tspan><tspan class="num">8</tspan><tspan class="val"> emotions × </tspan><tspan class="num">20</tspan><tspan class="val"> sentences each,</tspan></text>
+  <text class="val" x="40" y="296">somatic minimal-pairs template</text>
+
+  <!-- CORPUS — PHASE 8 -->
+  <text class="label" x="40" y="324">CORPUS — PHASE 8</text>
+  <text x="40" y="348"><tspan class="num">40</tspan><tspan class="val"> sentences total — </tspan><tspan class="num">20</tspan><tspan class="val"> guilt-somatic + </tspan><tspan class="num">20</tspan><tspan class="val"> shame-somatic,</tspan></text>
+  <text class="val" x="40" y="368">no narrative wrapper</text>
+
+  <!-- STEERING μ — INITIAL -->
+  <text class="label" x="40" y="396">STEERING μ — INITIAL</text>
+  <text class="num" x="40" y="420">4, 8, 16, 32</text>
+  <text class="val-muted" x="40" y="440">(found insufficient — see units bug)</text>
+
+  <!-- STEERING μ — CORRECTED -->
+  <text class="label" x="40" y="468">STEERING μ — CORRECTED</text>
+  <text class="num" x="40" y="492">50, 100, 200, 300</text>
+</svg>

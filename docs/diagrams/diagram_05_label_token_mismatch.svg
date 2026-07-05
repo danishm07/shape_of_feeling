@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+DATA TRACE (diagram_05_label_token_mismatch.svg) — single idea: each feature's automatically-
+generated label does not describe what it actually fires on. Source: diagram_jsons/diagram_05_label_token_mismatch.json
+  feature 12579 -> features[0].feature_id, .claimed_label, .real_top_tokens
+  feature 13615 -> features[1].feature_id, .claimed_label, .real_top_tokens
+  feature 09542 -> features[2].feature_id, .claimed_label, .real_top_tokens
+  feature 14602 -> features[3].feature_id, .claimed_label, .real_top_tokens
+-->
+<svg width="800" height="270" viewBox="0 0 800 270" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@400;500&amp;display=swap');
+    .bg { fill: #fffff8; }
+    .hdr { font-family: 'EB Garamond', serif; font-style: italic; fill: #555555; font-size: 13px; }
+    .id { font-family: 'Inter', sans-serif; font-size: 11px; fill: #555555; }
+    .claim { font-family: 'EB Garamond', serif; font-style: italic; fill: #111111; font-size: 14px; }
+    .tok { font-family: 'Inter', sans-serif; font-size: 12px; fill: #111111; }
+  </style>
+  <rect class="bg" x="0" y="0" width="800" height="270"/>
+
+  <text class="hdr" x="48" y="30">claimed label</text>
+  <text class="hdr" x="360" y="30">real top tokens</text>
+  <line x1="48" y1="44" x2="752" y2="44" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 12579 -->
+  <text class="id" x="48" y="66">12579</text>
+  <text class="claim" x="140" y="66">opinion / subjective evaluation</text>
+  <text class="tok" x="360" y="66">quite, pretty, very, rather, promising, fairly</text>
+  <line x1="48" y1="82" x2="752" y2="82" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 13615 -->
+  <text class="id" x="48" y="104">13615</text>
+  <text class="claim" x="140" y="104">emotional expressions</text>
+  <text class="tok" x="360" y="104">felt, Felt, feel, feels, feeling</text>
+  <line x1="48" y1="120" x2="752" y2="120" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 09542 -->
+  <text class="id" x="48" y="146">09542</text>
+  <text class="claim" x="140" y="146">specific terms related to</text>
+  <text class="claim" x="140" y="168">scientific or medical concepts</text>
+  <text class="tok" x="360" y="146">脚注の使い方, feel, featureID, aarrggbb,</text>
+  <text class="tok" x="360" y="168">feel, Feel, PerformLayout, Feels</text>
+  <line x1="48" y1="184" x2="752" y2="184" stroke="#cccccc" stroke-width="1"/>
+
+  <!-- 14602 -->
+  <text class="id" x="48" y="216">14602</text>
+  <text class="claim" x="140" y="216">expressions of apology and</text>
+  <text class="claim" x="140" y="238">self-deprecation in communication</text>
+  <text class="tok" x="360" y="216">脚注の使い方, SourceChecksum, Autorizaciones, riwal,</text>
+  <text class="tok" x="360" y="238">invokeLater, WaitGroup, dafx, myself</text>
+</svg>
