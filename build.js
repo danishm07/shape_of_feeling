@@ -279,7 +279,11 @@ function build() {
     copyRecursive(DIAGRAMS_SRC, DIAGRAMS_DEST);
   }
 
-  for (const heroSrc of [path.join(ROOT, 'repin_ivan.jpg'), path.join(SRC, 'repin_ivan.jpg')]) {
+  for (const heroSrc of [
+    path.join(ROOT, 'repin_ivan.jpg'),
+    path.join(SRC, 'repin_ivan.jpg'),
+    path.join(ROOT, 'Iván_el_Terrible_y_su_hijo,_por_Ilyá_Repin-2.jpg'),
+  ]) {
     if (fs.existsSync(heroSrc)) {
       fs.copyFileSync(heroSrc, path.join(DOCS, 'repin_ivan.jpg'));
       break;

@@ -277,7 +277,7 @@ hr {
 /* ── Hero image ── */
 
 .hero {
-  margin: 0;
+  margin: 0 0 2rem;
   padding: 0;
   width: 100%;
 }
@@ -292,12 +292,12 @@ hr {
 
 .hero figcaption {
   font-family: "EB Garamond", Garamond, "Times New Roman", serif;
-  font-size: 0.68rem;
+  font-size: 0.55rem;
   font-style: italic;
   color: var(--muted);
   text-align: center;
-  margin: 0.6rem 0 0;
-  line-height: 1.45;
+  margin: 0.5rem 0 0;
+  line-height: 1.4;
 }
 
 .hero figcaption em {
