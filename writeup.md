@@ -405,7 +405,7 @@ Here's the whole arc side by side: what each phase found at first, what happene
 
 11. Limitations 
 
- The Ising coupling is a statistical relationship between activations, but not a causal arrow between concepts. "Remorse causes regret, regret causes hindsight" isn't a claim this analysis can make. These six were also not a representative sample, being the survivors of a multi-stage filter. A different filter, or different layers, might surface a different six with a different structures.
+ The Ising coupling is a statistical relationship between activations, but not a causal arrow between concepts. "Remorse causes regret, regret causes hindsight" isn't a claim this analysis can make. These six were also not a representative sample, being the survivors of a multi-stage filter. A different filter, or different layers, might surface a different six with different structures.
 
 Every experiment here was run on a single model: Gemma-2-2B, chosen primarily for its size relative to the hardware available. Nothing found here has been checked against any other architecture, and there's no basis yet for assuming any of it generalizes beyond this one model, which is a real gap to cover in future work. 
 
