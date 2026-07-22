@@ -36,6 +36,19 @@ function normalizeWhitespace(markdown) {
   return markdown.replace(/(\n[ \t\u00a0]*){3,}/g, '\n\n');
 }
 
+/** Fix irregular word spacing from pasted nbsp / trailing whitespace */
+function normalizeTypography(markdown) {
+  return markdown
+    .replace(/\u00a0/g, ' ')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/[ \t]{2,}/g, ' ');
+}
+
+/** Strip empty / whitespace-only paragraphs left after markdown parse */
+function cleanEmptyParagraphs(html) {
+  return html.replace(/<p>(?:\s|&nbsp;|&#160;|\u00a0)*<\/p>/gi, '');
+}
+
 /** Ensure prose after a table isn't parsed as part of the table */
 function terminateTables(markdown) {
   const lines = markdown.split('\n');
@@ -99,7 +112,8 @@ function preprocessHeadings(markdown) {
     }
 
     if (/^\*\*(.+)\*\*\s*$/.test(trimmed)) {
-      out.push(`### ${trimmed.replace(/^\*\*|\*\*$/g, '')}`);
+      const label = trimmed.replace(/^\*\*|\*\*$/g, '').replace(/\.$/, '');
+      out.push(`### ${label}`);
       continue;
     }
 
@@ -107,19 +121,23 @@ function preprocessHeadings(markdown) {
       prevBlank &&
       (nextBlank || nextIsBody) &&
       trimmed.length >= 8 &&
-      trimmed.length <= 78 &&
-      /^[A-Z{*]/.test(trimmed) &&
+      trimmed.length <= 70 &&
+      /^[A-Z*]/.test(trimmed) &&
       !trimmed.startsWith('|') &&
       !trimmed.startsWith('!') &&
       !trimmed.startsWith('-') &&
       !trimmed.startsWith('$$') &&
+      !trimmed.endsWith(':') &&
       !isListItem(trimmed) &&
       !/^[a-z_]+\s*=/.test(trimmed) &&
-      !/^(\d+\.\d+\s|joy ↔|Every pair|For example|Hope:|Dread:|The full corpus)/.test(trimmed) &&
+      !/^(\d+\.\d+\s|joy ↔|Every pair|For example|Hope:|Dread:|The full corpus|For a feature)/.test(trimmed) &&
       !/^"[A-Z]/.test(trimmed) &&
-      trimmed.split(/\s+/).length <= 12
+      !/,\s*then,/i.test(trimmed) &&
+      trimmed.split(/\s+/).length <= 11
     ) {
-      out.push(`### ${trimmed}`);
+      // Drop trailing period on short section labels for cleaner headings
+      const label = trimmed.replace(/\.$/, '');
+      out.push(`### ${label}`);
       continue;
     }
 
@@ -256,6 +274,7 @@ function build() {
     console.warn('');
   }
 
+  markdown = normalizeTypography(markdown);
   markdown = preprocessHeadings(markdown);
   markdown = normalizeWhitespace(markdown);
   markdown = terminateTables(markdown);
@@ -272,6 +291,7 @@ function build() {
   const { markdown: safeMd, blocks: mathBlocks } = protectMath(markdown);
   let contentHtml = marked.parse(safeMd);
   contentHtml = restoreMath(contentHtml, mathBlocks);
+  contentHtml = cleanEmptyParagraphs(contentHtml);
   contentHtml = formatReferencesHtml(contentHtml);
   const template = fs.readFileSync(templatePath, 'utf8');
   const finalHtml = template.replace('{{CONTENT}}', () => contentHtml);
