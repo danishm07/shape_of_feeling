@@ -1,20 +1,20 @@
 0. The Question 
 
-As humans we have the fortunate, and often overwhelming, condition of feeling emotions. Guilt, hate, joy. We feel them through the body and express them with language: butterflies in the stomach, skin prickling, a slight buzz. There's a good chance you understand immediately what experiences and sensations these are referring to. But do language models? With the rise of LLMs, in their capabilities and their use as confidants and companions, this question has become even more intriguing. Just as we've built language models that develop semantic understanding through attention mechanisms — allowing each word to gather meaning from its context (Vaswani et al., 2017) — and found them to represent abstract concepts as directions in activation space (Sofroniew et al., 2026), can we find how they structure something like human emotion? Or is "emotion" to a model nothing more than surface-level pattern completion? And if real structure exists, as in, if a model can somehow separate guilt from shame the way it separates a noun from a verb, is that structure grounded in something like bodily experience, the way psychologists propose it is for us, or is it just pattern-matching linguistics with nothing underneath? 
+As humans we have the fortunate, and often quite overwhelming, condition of feeling these things we call emotions. Guilt, hate, joy. We feel them through the body and express them with language: butterflies in the stomach, skin prickling, a slight buzz. There's a good chance you understand immediately what experiences and sensations these are referring to. But do language models? With the rise of LLMs, in their capabilities and their use as confidants and companions, this question has become even more intriguing. Just as we've built language models that develop semantic understanding through attention mechanisms — allowing each word to gather meaning from its context (Vaswani et al., 2017) — and found them to represent abstract concepts as directions in activation space (Sofroniew et al., 2026), can we find how they structure something like human emotion? Or is "emotion" to a model nothing more than surface-level pattern completion? And if real structure exists, as in, if a model can somehow separate guilt from shame the way it separates a noun from a verb, is that structure grounded in something like bodily experience, the way psychologists propose it is for us, or is it just pattern-matching linguistics with nothing underneath? 
 
 Answering this proved to be much less straightforward than expected. Multiple, seemingly reasonable, approaches led down winding paths to nowhere early on. Language models, even small ones, have vast internal "representational" spaces, and while many tools exist to label what's found there, mapping something like "emotion" in this great unknown is an adventure. As you'll see, the labels these tools produce require proper, extensive nuance and verification to claim insights from. In this writeup, we’ll go through the various tools we used to try and understand emotion in this space, how we narrowed down to understand one emotion deeply, and why some maps performed very well, while others may have looked at the world wrong from the start. 
 
-Initially every method here looked solid, only to then break under a second look. CAA's similarity matrix was reading sentence structure instead of emotion. Logit Lens's divergence number didn’t hold up next to a neutral control. The SAE filter's surviving candidates were mostly tracking how the corpus was written, but not what it meant. Steering almost failed outright because the first multiplier was thirty times too weak. Pearson's correlation matrix turned out to be borrowing most of its signal from one shared connection. The intriguing part was that most of this process wasn’t planned, with each check being motivated by the last result feeling slightly off. What's left after all of that is six causally verified features, organized as a chain rather than a cluster, with a body-language signature that leans toward shame more than guilt, all of which survived our constant attempts to break them. 
+Initially every method here looked solid, only to then break under a second look. CAA's similarity matrix was reading sentence structure instead of emotion. Logit Lens's divergence number didn’t hold up next to a neutral control. The SAE filter's surviving candidates were mostly tracking how the corpus was written, but not what it meant. Steering almost failed outright because the first multiplier was thirty times too weak. Pearson's correlation matrix turned out to be borrowing most of its signal from one shared connection. The intriguing part was that most of this process wasn’t planned, with each check being motivated by the last result feeling slightly off. What's left after all of that is six causally verified features, organized as a chain, all of which survived our constant attempts to break them. 
 
-1. Phase 1: Contrastive Activation Addition 
+1. Contrastive Activation Addition 
 
-We initially started with contrastive activation addition (CAA): a simple method for extracting concept directions from a model's activation space [Turner et al. 2023] by subtracting the mean activations of a model running a wanted and an unwanted behavior. The appeal for this method was the directness and straightforwardness it provided. CAA was originally designed for contrasting behaviors, and we adapted it here as a concept-discovery tool, contrasting passages containing emotion (of any sort) against a neutral baseline in place of an opposing behavior. The thinking was simple: if we find the activations of a concept and of a neutral baseline, the difference in means should point toward the concept in activation space. For a question as open-ended as "do emotional concepts have geometric structure," the simplest tool seemed like the right place to start. It's like using a stick and its shadow to find direction instead of building a compass. 
+We initially started with contrastive activation addition (CAA): a simple method for extracting concept directions from a model's activation space [Turner et al. 2023] by subtracting the mean activations of a model running a wanted and an unwanted behavior. The appeal for this method was the directness and straightforwardness it provided. CAA was originally designed for contrasting behaviors, and we adapted it here as a concept-discovery tool, contrasting passages containing emotion (of any sort) against a neutral baseline in place of an opposing behavior. The thinking was simple: if we find the activations of a concept and of a neutral baseline, the difference in means should point toward the concept in activation space. For a question as open-ended as "do emotional concepts have geometric structure," the simplest tool seemed like the right place to start.
 
 For the implementation, we built a similarity matrix across 8 distinct emotion vectors (joy, anger, sadness, dread, awe, nostalgia, guilt, hope) and measured cosine similarity by pair, found through 
 
-dread_vector = mean(dread_activations) - mean(neutral_activations): 
+$$\text{dread\_vector} = \text{mean}(\text{dread\_activations}) - \text{mean}(\text{neutral\_activations})$$
 
-cos(𝜃)=𝑣1⋅𝑣2∣∣∣∣𝑣1∣∣∣∣,∣∣∣∣𝑣2∣∣∣∣
+$$\cos(\theta) = \frac{v_1 \cdot v_2}{\|v_1\|\,\|v_2\|}$$
 
  
 
@@ -28,11 +28,11 @@ Every pair landed between 0.87 and 0.99. Joy and dread were nearly identical. 
 
 We believe there are two compounding reasons for these methods to not have worked as expected. First, a setup issue. For a method like this to be successful, the neutral baseline needs to be stylistically matched to the emotion passages, and we suspect the resulting vectors capture stylistic differences in the writing at least as strongly as, if not more strongly than, the underlying emotional content. Second, this could also be due to sequence averaging. We get into that next. 
 
-2. Phase 2: The Somatic Minimal-Pairs Corpus 
+2. The Somatic Minimal-Pairs Corpus 
 
 The fix we eventually landed on was building sentences around somatic metaphors: figurative phrases that link emotional states to specific bodily sensations, like “chest tightening” or “hands going still” (Barrett, 2017). Somatic metaphors work better for this because they carry the emotion without ever naming it, which makes them useful for finding exactly where in a sentence the emotional signal sits.
 
-Take one: "She opened the letter and felt her chest tighten." Eleven tokens, and the part that's actually doing the emotional work (the dread , or “unease” if you’d like) lives entirely in "tighten," which is just one token, at position 9. Everything else around it is neutral. Our corpus had kept passages to roughly this length, on the assumption that the emotional signal lived in a single token, but what we found was that averaging activations across all eleven positions dilutes that one token down to about 1/11th of the resulting vector. The other 10/11 is just "a sentence about someone feeling something in their body," and that's nearly identical whether the sentence is about guilt, hope, or anything else. CAA was reading the shared skeleton of these sentences instead of the emotion itself.  
+Take one: "She opened the letter and felt her chest tighten." Eleven tokens, and the part that's actually doing the emotional work (the dread , or “unease” if you’d like) lives entirely in "tighten," which is just one token, at position 9. Everything else around it is neutral. Our corpus had kept passages to roughly this length, on the assumption that the emotional signal lived in a single token, but what we found was that averaging activations across all eleven positions dilutes that one token down to about 1/11th of the resulting vector. The other 10/11 is just "a sentence about someone feeling something in their body," and that's nearly identical whether the sentence is about guilt, hope, or anything else. What we came to believe was that CAA was reading the shared skeleton of these sentences instead of the emotion itself.  
 
 
 ![[diagram_02_dilution.svg]]
@@ -68,7 +68,7 @@ While building this out, there were two important design choices. First, every s
 
 Writing one good sentence like that by hand for each emotion is one thing, but doing it at scale is another. We used Claude Sonnet 4.6 to generate 15-20 somatic metaphors per emotion, prompted to follow the defined structure (with freedom on exact verbs and vocabulary) and anchored to a hand-picked example corpus drawn from a range of literature, mostly children's books for simplicity, alongside more abstract passages from popular literature. At scale, this turned out to 160 sentences, 8 concepts, 20 sentences per concept, 4 concept pairs. 
 
-3. Phase 3: Logit Lens 
+3. Logit Lens 
 
 These results raised an important question. If emotional concepts truly differ, why did CAA fail to detect them? Was the model collapsing emotional representations into a shared direction, or was our measurement masking distinctions that still existed internally? Answering that meant finding a tool capable of inspecting representations directly, rather than averaging them away. 
 
@@ -84,8 +84,6 @@ logitsl =rl(pos) ⋅WU ,r∈R2304 
 
 At the final layer, this is just the model's ordinary next-token prediction. Logit Lens (Nostalgebraist, 2020; Belrose et al., 2023) reuses this same operation at any earlier layer l, asking: what would the model predict if computation stopped right here? That's how a continuous hidden state at any token position, at any layer, gets translated into a human-readable distribution over vocabulary. 
 
-{[DIAGRAM 3 — optional, lower priority] Simple residual-stream/unembedding diagram showing where Logit Lens taps into the stack relative to the final layer.} 
-
 Why this fixes the dilution problem.  
 
 Recall CAA's core flaw: we derived the emotional steering vector by averaging hidden states across every token in the sequence: 
@@ -94,11 +92,11 @@ $$v_{CAA} = \frac{1}{N}\sum_{i=1}^{N} h_i$$ (where $h$ is the hidden state an
 
  In an 11-token sequence where only one token carries the emotional signal, this operation heavily dilutes the signal by blending it with ten tokens of neutral, structural context. 
 
-Logit lens, while also combining information, avoids the averaging problem specifically. Instead of collapsing the whole sentence into one vector, it isolates the residual stream at one exact point and one exact depth, with the point being the token position and the depth being the layer. It combines depth-wise at a single token, rather than breadthwise across all of them. By targeting the exact token position where the emotional signal is introduced, the dilution effect disappears. There's no mixing with surrounding grammar or averaging across the sequence. It's like going from a blunt, sequence-wide measurement to a precise, token-level, specific one. 
+Logit lens, while also combining information, avoids the averaging problem specifically. Instead of collapsing the whole sentence into one vector, it isolates the residual stream at one exact point and one exact depth, with the point being the token position and the depth being the layer. It combines depth-wise at a single token, rather than breadthwise across all of them. By targeting the exact token position where the emotional signal is introduced, the dilution effect disappears. There's no mixing with surrounding grammar or averaging across the sequence. 
 
 The extraction loop.  
 
-For each minimal sentence pair in our corpus — Concept A vs. Concept B — we ran the following: 
+For each minimal sentence pair in our corpus (Concept A vs. Concept B) we ran the following: 
 
 1. Tokenize: convert the raw text into model inputs — tokens = tl_model.to_tokens(sentence), shape [1, seq_len]. 
     
@@ -128,7 +126,7 @@ The metric. To quantify this across the dataset, we used a strict top-1 comp
 
 This is designed to be an "un-refined" metric. A binary top-1 comparison doesn't capture partial similarity across the full vocabulary distribution, and KL divergence or cosine similarity over the full logit vectors would be more rigorous. We chose top-1 specifically for its interpretability: it grounds the measurement in a concrete, observable thing the model is prioritizing at that depth, rather than an abstract distributional distance. 
 
-4. Phase 4: Results, Corrected 
+4. Results, Corrected 
 
 The qualitative signal.  
 
@@ -144,7 +142,7 @@ At layer 12 - roughly the midpoint of Gemma-2-2B's 26 layers, and also wi
 
 What we found were results that look to be more than just simple structural representations. While the target words themselves are physical -"still," "hot," "lift," "tighten"- the model's top vocabulary predictions are emotionally coherent on top of that physicality: shame's heat predicts "blushing," hope's lift predicts "relieved," and guilt's stillness predicts "hesitation." At this layer, the residual stream at the emotion token appears to preserve information correlated with more than just local syntax. 
 
-One caveat, however, is that a later, corrected re-run of this same extraction uncovered a real artifact in three of nine tested emotions. Gemma-2-2B's middle layers, like many transformer models, contain a small number of high-variance "rogue dimensions" that can dominate raw logit-lens projections (Belrose et al., 2023, citing Timkey & van Schijndel, 2021), which in our case manifested as archaic-spelling tokens ("againſt," "becauſe"). Hope, Dread, and Regret were partially or fully affected by this in the corrected run. Guilt, Shame, Relief, Longing, Nostalgia, and Sadness were not. So, the table above should be read as six clean hits and a few that need the artifact noted alongside them, not nine uniformly clean results. 
+One caveat, however, is that a subsequent corrected re-run of this same extraction uncovered a real artifact in three of nine tested emotions. Gemma-2-2B's middle layers, like many transformer models, contain a small number of high-variance "rogue dimensions" that can dominate raw logit-lens projections (Belrose et al., 2023, citing Timkey & van Schijndel, 2021), which in our case manifested as archaic-spelling tokens ("againſt," "becauſe"). Hope, Dread, and Regret were partially or fully affected by this in the corrected run. Guilt, Shame, Relief, Longing, Nostalgia, and Sadness were not. 
 
 The original divergence finding, and why it doesn't hold up.  
 
@@ -172,7 +170,7 @@ Every ratio sits between 0.92 and 1.15. A ratio of 1.0 would mean an emotion pai
 
 The layer-12 qualitative hits are real and reproduced, but the quantitative claim that emotions occupy separable regions of activation space, built on raw divergence rate alone, however, is not supported once a proper baseline is applied. 
 
-Phase 6: The SAE Filter 
+5. The SAE Filter 
 
 Two methods had now failed, both for the same underlying reason: superposition. A model's internal state at any layer and token is a vector of raw numbers, 2,304 of them, and the model crams far more concepts into that space than it has room for, forcing them to overlap. This is what CAA's averaging compounded, and what produced Logit Lens's rogue-dimension artifacts. 
 
@@ -184,7 +182,7 @@ The sparsity constraint forces the small number of active slots , which are 
 
 $$\hat{r} = f \cdot W_{dec}$$ 
 
-Training is the repeated process of narrowing the gap between $\hat{r}$ and the real $r$ across millions of real activations, while keeping $f$ mostly zero throughout. This is also why it matters to verify what each of these 16,384 numbers is actually doing, rather than assuming. The entire research question depends on being able to point at one specific number and say: "this is guilt, not guilt-blended-with-something-else." 
+Training is the repeated process of narrowing the gap between $\hat{r}$ and the real $r$ across millions of real activations, while keeping $f$ mostly zero throughout. This is also why it matters to verify what each of these 16,384 numbers is actually doing, rather than assuming. The premise depends on being able to point at one specific number and be confident that "this is guilt". 
 
 We used GemmaScope (Lieberum et al., 2024), a sparse autoencoder pretrained for Gemma-2-2B and released by DeepMind, accessed through SAELens. We tested layers 12, 16, and 20, following Shu et al. (2026)'s three-phase model of emotion processing, where layer 12 is roughly semantic, layer 16 a transition, and layer 20 emotion-specific. 
 
@@ -210,7 +208,7 @@ The filter's four checks, and why they weren't enough 
 
 Each of the four checks above was built to rule out one specific way a feature could look promising without actually meaning anything: a feature that fires on nearly everything (caught by the target/neutral split), a feature with no real gap between target and baseline (caught by differential), a feature that's just a generic "this is emotional" detector firing equally across several different emotions (caught by dominance). Each rule answers a real failure mode. 
 
-Running this against guilt, dread, and relief across all three layers, 502 features survived roughly 49,000 checked,  a real result, but barely narrower than picking at random. The four checks, individually reasonable, weren't enough together: they can only measure statistical association with how sentences happen to be labeled, not whether a feature tracks the underlying concept those labels are pointing at. 
+Running this against guilt, dread, and relief across all three layers, 502 features survived roughly 49,000 checked,  a real result, but barely narrower than picking at random. The four checks, individually reasonable, weren't enough together, as they can only measure statistical association with how sentences happen to be labeled, and were not able to measure whether a feature tracks the underlying concept those labels are pointing at. 
 
 To really believe this we had to confirm this directly. Running a Pearson correlation across all surviving guilt candidates surfaced two features, 12579 and 13615, correlating at roughly 0.74, and this seemed high enough to look like a real, paired relationship. Pulling each feature's actual top activating tokens from Neuronpedia (the real words from real text that make a feature fire most strongly, independent of whatever summary label sits on top of it), told a different story: 
 
@@ -227,15 +225,17 @@ Neither token list has anything to do with guilt specifically. 12579 is a hedge-
 
 Two more candidates compounded the same lesson. A feature labeled "scientific/medical concepts" turned out to be a second, independently discovered hidden copy of the same "feel"-verb pattern as 13615, mislabeled completely differently despite tracking the same thing. A feature labeled "apology and self-deprecation" had real top tokens that were mostly code fragments and the word "myself," although, despite a plausible-sounding label, it was not an apology detector at all. 
 
-A separate, text-only diagnostic confirmed why this kept happening. We used TF-IDF (a statistic measuring how important a word is to a document within a corpus) vectorizing the same corpus built in Phase 2 and comparing within-category to between-category similarity, with no model involved at all. Guilt and shame sentences in the generated corpus shared roughly 90%of vocabulary with each other as they did within their own category. The categories were never cleanly separated at the level of raw word choice, before any model representation entered the picture. Garbage in, garbage out. 
+A separate, text-only diagnostic confirmed why this kept happening. We used TF-IDF (a statistic measuring how important a word is to a document within a corpus) vectorizing the same corpus built in Phase 2 and comparing within-category to between-category similarity, with no model involved at all. Guilt and shame sentences in the generated corpus shared roughly 90% of vocabulary with each other as they did within their own category. The categories were never cleanly separated at the level of raw word choice, before any model representation entered the picture. Garbage in, garbage out. 
 
-The lesson generalizes beyond these specific cases: an automatically generated label tracks surface-level stylistic co-occurrence in the corpus, not the underlying conceptual geometry the label claims to describe. Trusting it without reading the real tokens a feature responds to would have meant building the rest of this project on noise, which is partly why every candidate that made it to causal steering in Phase 7 was checked this way first, with several of them turning out to be real.  
+This finding is also generalizable beyond these specific cases. An automatically generated label tracks surface-level stylistic co-occurrence in the corpusinstead of the underlying conceptual geometry the label claims to describe. To ensure that we could trust these features, we had every candidate that made it to causal steering in Phase 7 was checked this, more rigorous, way first, with several of them turning out to be real.  
 
 A scope note. Every method up to this point, whether it be CAA or the two Logit Lens runs, was tested across the full range of emotions we started with, and none of them found anything emotion-specific to choose between. The SAE filter is the first method granular enough to produce individually nameable candidates rather than one aggregate number. Once that pool existed, guilt candidates were the richest. From here through the end of this writeup, everything is focused on guilt alone. This isn’t because guilt is uniquely interesting among emotions, but because this is where the pipeline produced something interesting and manageable that we wanted to truly go deep on.  
 
-7. Phase 7: Causal Steering 
+6. Causal Steering 
 
-Everything up to this point — the Logit Lens, the SAE filter, the token-reading checks — only ever measured association. A feature firing reliably whenever guilt text appears tells you it co-occurs with guilt. It doesn't tell you whether the feature represents guilt, merely correlates with something that happens to ride along with guilt in this particular corpus, or represents guilt's cause rather than the feeling itself. It’s like saying a cake you found really sweet is because of the sugar you saw listed in the ingredients, instead of making different cakes with different amounts of sugar, or different ingredients, and tasting how sweet they are. All three possibilities produced the same observable signature, but no amount of watching can tell them apart. 
+Everything up to this point, from the Logit Lens, to the SAE filter, and now the token-reading checks, only ever measured association. A feature firing reliably whenever guilt text appears tells you it co-occurs with guilt. It doesn't tell you whether the feature represents guilt, merely correlates with something that happens to ride along with guilt in this particular corpus, or represents guilt's cause rather than the feeling itself.
+
+It’s like saying a cake you found really sweet is because of the sugar you saw listed in the ingredients, instead of making different cakes with different amounts of sugar, or different ingredients, and tasting how sweet they are. All of the possibilities produced the same observable signature, but no amount of watching can tell them apart. 
 
 The only way to test which one is true is to intervene. We do this by forcing a feature active on a sentence that has no textual reason to involve guilt at all and see whether guilt-related content shows up anyway. If the feature is just a bystander, correlated with guilt by accident of corpus styling, the way 12579 and 13615 turned out to be, forcing it on should do nothing because there was never anything guilt-specific encoded in it to begin with. If it is real, forcing it on should produce guilt-shaped content even with zero supporting evidence in the prompt (because you've activated the feature’s causal role rather than waited for the right words to trigger it). 
 
@@ -251,13 +251,13 @@ The first attempt at this used $\mu \in {4, 8, 16, 32}$. These values seemed 
 
 $$\rho = \frac{\mu}{||r||}$$ 
 
-At $\mu=16$, layer 16: $\rho \approx 0.033$. The intervention was adding only about 3.3% of the model's own typical signal magnitude. Not really steering; that's a whisper lost inside a much louder existing signal. A real, working feature would look exactly as indistinguishable from a fake one at this strength, simply because neither was given enough room to do anything. The corrected range was much greater: $\mu \in {50, 100, 200, 300}$, chosen to inject somewhere between 10% and 60% of the residual stream's measured norm. 
+At $\mu=16$, layer 16: $\rho \approx 0.033$. The intervention was adding only about 3.3% of the model's own typical signal magnitude. A real, working feature would look exactly as indistinguishable from a fake one at this strength, simply because neither was given enough room to do anything. The corrected range was much greater: $\mu \in {50, 100, 200, 300}$, chosen to inject somewhere between 10% and 60% of the residual stream's measured norm. 
 
 ![[diagram_06_units_bug.svg]]
 
 Reading tokens before spending compute 
 
-Two features (13305, 11883) had already shown a real, well-supported correlation worth testing first. Beyond those, rather than guessing which of the remaining ~60 candidates were worth the GPU cost of a steering run, every one was read directly: real label, real top-8 activating tokens, no exceptions. Most were confirmed junk by the same label-versus-token mismatch pattern already established in Phase 6. A handful were real, but entirely unrelated to guilt (love, pride, secrets) and set aside. Seven were judged genuinely on topic enough to warrant a steering test. 
+Two features (13305, 11883) had already shown a real, well-supported correlation worth testing first. Beyond those, rather than guessing which of the remaining ~60 candidates were worth the GPU cost of a steering run, every one was read directly: real label, real top-8 activating tokens, no exceptions. Most were confirmed junk by the same label-versus-token mismatch pattern already established in Phase 6. A handful were real, but entirely unrelated to guilt (love, pride, secrets) and set aside. Seven were judged on this topic enough to warrant a steering test. 
 
 Results: six verified, two informative negatives 
 
@@ -283,9 +283,9 @@ Checking the original two features under resampling 
 
 Before treating 13305 and 11883 as settled, we checked whether their observed firing rates on the narrative corpus were stable or whether they could plausibly have come out differently with a slightly different sample of sentences. Resampling each feature's per-sentence fire record with replacement 10,000 times and taking the middle 95% of the resulting rates gave a 95% confidence interval of [0.680, 0.845] for 13305 and [0.660, 0.835] for 11883. These results were both narrow and both stable. The same resampling has not yet been run on the four newer features' narrative fire rates, though, as the next section shows, all six features' somatic fire rates have already been checked this way. 
 
-8. Phase 8: The Somatic Test 
+7. The Somatic Test 
 
-Six features had now survived causal verification on narrative text — text with a setting, an agent, a small story building toward the body's response. The question was whether this generalized beyond narrative, or whether these features were only ever picking up on something specific to stories about guilt, rather than guilt's bodily signature itself. 
+Six features had now survived causal verification on narrative text, which we defined as text with a setting, an agent, and a small story building toward the body's response. The question was whether this generalized beyond narrative, or whether these features were only ever picking up on something specific to stories about guilt, rather than guilt's bodily signature itself. 
 
 The corpus for this phase, despite also focusing on somatic metaphors, is different from Phase 2's. Phase 2's sentences wrap every somatic signal in a small narrative that consists of a person, a situation, and then the body's response. "She opened the letter and felt her chest tighten" has a person and a situation doing real work alongside body language. This corpus strips that structuring wrapper away entirely, leading to: Twenty handwritten guilt sentences, twenty handwritten shame sentences, using the same body-part-and-verb vocabulary, but without an agent, action, or setting. Just the isolated sensation, with nothing else for the model to draw on. 
 
@@ -293,7 +293,7 @@ If the six features only fire reliably when a story surrounds the body languag
 
 Method. Identical to the SAE filter's per-sentence fire-rate logic from Phase 6, applied to this new isolated corpus instead. 
 
-Initial result. Five of the six verified features fired more often on shame's body-vocabulary than on guilt's own. The mapping itself was chosen by hand — guilt to "hands go still," shame to "face go hot" — based on human intuition about which bodily sensations match which emotions, so it's possible that some amount of the guilt/shame overlap in these results may already be present in that design choice, even before the model ever saw a sentence. What this test *can* show is how the verified features respond to this specific, human-chosen body-language vocabulary. 
+Initial result. Five of the six verified features fired more often on shame's body-vocabulary than on guilt's own. The mapping itself was chosen by hand, with examples like matching guilt to "hands go still," and shame to "face go hot", being loosley based on human intuition about which bodily sensations match which emotions. This would make it definitley possible that some amount of the guilt/shame overlap in these results may already be present in that design choice, even before the model ever saw a sentence. What this test *can* show is how the verified features respond to this specific, human-chosen body-language vocabulary. 
 
 |   |   |   |   |
 |---|---|---|---|
@@ -324,7 +324,7 @@ Only feature 11883 shows a non-overlapping gap between guilt-somatic and shame-s
 
 ![[diagram_07_somatic_ci.html]]
 
-9. Phase 9: Pearson vs. Ising 
+8. Pearson vs. Ising 
 
 Now we have six features, individually verified as causally real. This doesn't tell us that they form one “coordinated structure” rather than six unrelated, separately functioning mechanisms that happen to all relate to guilt's aftermath. Answering that would mean looking at how the six relate to each other, and not just to guilt. 
 
@@ -355,7 +355,7 @@ The real, full result. Where Pearson found all 15 pairs positive, the Ising fit
 |   |   |   |   |
 |---|---|---|---|
 |Pair|Pearson|Ising|Direction|
-|13305 ↔ 11883|positive|+1.446|confirmed — strongest in the matrix|
+|13305 ↔ 11883|positive|+1.446|confirmed (strongest in the matrix) |
 |11883 ↔ 8567|positive|+0.979|confirmed|
 |8567 ↔ 15551|positive|+0.717|confirmed|
 |11883 ↔ 15551|+0.063|−0.326|flipped|
@@ -371,7 +371,7 @@ Signed cohesion dropped from Pearson's 1.000 to 0.333, which is a third of what
 
 The mechanism behind one specific flip, worked through 
 
-Pearson reported 13305 and 8567 at +0.157 — a modest but real-looking positive relationship. The Ising fit, however, found −0.139 for the same pair. The reasoning we have for this was that 13305 is very strongly and directly tied to 11883 ($J=+1.446$). 8567 is also very strongly, directly tied to 11883 ($J=+0.979$). Once the regression accounts for 11883's pull on both of them simultaneously, there's almost nothing left over for 13305 and 8567 to explain about each other, signifying that their apparent Pearson relationship was borrowed entirely from both independently sitting close to 11883, and not from any direct connection between them.  
+Pearson reported 13305 and 8567 at +0.157. Modest, but it's a real-looking positive relationship. The Ising fit, however, found −0.139 for the same pair. The reasoning we have for this was that 13305 is very strongly and directly tied to 11883 ($J=+1.446$). 8567 is also very strongly, directly tied to 11883 ($J=+0.979$). Once the regression accounts for 11883's pull on both of them simultaneously, there's almost nothing left over for 13305 and 8567 to explain about each other, signifying that their apparent Pearson relationship was borrowed entirely from both independently sitting close to 11883, and not from any direct connection between them.  
 
 What survives among these six: a chain, not a cluster.  
 
@@ -380,13 +380,13 @@ The structure that holds up once confounding is removed is 13305 ↔ 11883 ↔ 8
 ![[diagram_08_ising_chain.html]]
 
 
-10a. The Psychological Angle 
+9. The Psychological Angle 
 
 Lisa Feldman Barrett's theory of constructed emotion holds that emotions aren't discrete, separately-wired categories, and that they're assembled from more primitive ingredients such as sensory input, prior experience and cultural context (Barrett, 2017). Her framework has a specific observation about guilt and shame: both are self-directed, both follow some act,and  both live in the body as a kind of constriction (Tangney & Dearing, 2002; Tangney, Miller, Flicker, & Barlow, 1996). That's established independently in *human* psychology research, but they are also the theoretical motivation for why the somatic test was worth running at all.
 
 The human guilt/shame confusion literature also offers a plausible explanation for why a model trained on human-written text would produce a shame-lean specifically, rather than some unrelated emotion. It doesn't mean the model shares any neural circuitry, biological grounding, or felt experience with humans. The structure found here is a statistical pattern learned from text, which is consistent with what Barrett's framework would predict, but not proof the same mechanism produced it.
 
-Someone can transcribe a foreign language with perfect *phonetic* accuracy without *understanding* a single word. The structure survives the transfer, but the understanding behind it doesn't. A model trained on how humans write about guilt and shame can reproduce the structure of how those concepts relate in text — including some of the same confusions humans make — without anything resembling the experience that generated that structure for us.
+Someone can transcribe a foreign language with perfect *phonetic* accuracy without *understanding* a single word. The structure survives the transfer, but the understanding behind it doesn't. A model trained on how humans write about guilt and shame can reproduce the structure of how those concepts relate in text, which would also include some of the same confusions humans make, without anything resembling the experience that generated that structure for us.
 
 The chain structure could reflect something real about how this model organizes overlapping concepts, reusing shared machinery rather than building six independent systems, which would be consistent with Barrett's claim that emotional concepts share territory rather than occupying cleanly separated regions. It could also reflect a model inheriting whatever vocabulary overlaps already existed in its training text, with no organizing principle behind it. However, nothing here distinguishes between those two readings.
 
@@ -400,12 +400,12 @@ Here's the whole arc side by side: what each phase found at first, what happene
 |Phase|Method|Initial result|What happened next|Survived?|
 |1|CAA|Emotions collapsed into one direction|Traced to token-averaging dilution|No|
 |3–4|Logit Lens|90–100% divergence|Disappeared against a neutral control|Partial — qualitative hits only|
-|6|SAE filter|502 candidates passed four checks|Most were tracking corpus style, not concept|Partial — 6 of ~60 read candidates|
+|6|SAE filter|502 candidates passed four checks|Most were tracking corpus style instead of concept|Partial — 6 of ~60 read candidates|
 |7|Steering|First attempt produced nothing|Multiplier was 30x too weak; fixed|Yes — 6 features|
 |8|Somatic test|5 of 6 leaned toward shame|Only 1 held up under a real confidence interval|Weak|
 |9|Ising|Pearson said one tight cluster|Conditioning broke it into a chain|Yes|
 
-11. Limitations 
+10. Limitations 
 
  The Ising coupling is a statistical relationship between activations, but not a causal arrow between concepts. "Remorse causes regret, regret causes hindsight" isn't a claim this analysis can make. These six were also not a representative sample, being the survivors of a multi-stage filter. A different filter, or different layers, might surface a different six with different structures.
 
@@ -419,15 +419,15 @@ The vignette comparisons (Phase 3's situational, non-somatic corpus, extended la
 
 Finally, this entire project narrowed to guilt specifically starting at the SAE filter (Phase 6) onward, for practical reasons rather than any claim that guilt is uniquely interesting among emotions. Whether the chain structure, the units-bug lesson, or the shame-leaning somatic signature are guilt-specific findings or general patterns across self-conscious emotions is the most direct open question this project leaves behind. 
 
-12. What's Next 
+11. What's Next 
 
-The most direct next step is the one named throughout this writeup: running the same pipeline — corpus generation, the SAE filter, label-reading, causal steering, the somatic test, the Ising fit — on a second emotion. Nostalgia or hope are the strongest candidates, chosen specifically for sitting further from guilt and shame's already-documented vocabulary entanglement, making them a cleaner test of whether anything found here generalizes rather than a repeat of the same overlapping territory. This is real, separate experimental work at every stage, not a rerun of existing results, and it's the next thing this project will actually do. 
+The most direct next step is the one named throughout this writeup: running the same pipeline — corpus generation, the SAE filter, label-reading, causal steering, the somatic test, the Ising fit — on a second emotion. Nostalgia or hope are the strongest candidates, chosen specifically for sitting further from guilt and shame's already-documented vocabulary entanglement, making them a cleaner test of whether anything found here generalizes rather than a repeat of the same overlapping territory. This is separate experimental work at every stage and it's the next thing this project will actually focus on. 
 
-A few smaller, cheaper checks remain open from inside the guilt pipeline. A causal test of the combined chain vector — the summed decoder directions of 13305, 11883, and 8567, steered together against a same-size random combination — has never been run, and would test whether the chain acts as a genuinely coordinated unit under intervention, not just a statistically real structure under observation. Bootstrap confidence intervals exist for the original two features' narrative fire rates, but not yet for the four features discovered later; that data already exists and the resampling itself is cheap. And the somatic Ising fit, run here on four of the six features, still needs 13305 and 11883's somatic vectors merged in to produce the real six-feature matrix — the data for this has already been located, just not yet merged and rerun. 
+A few smaller, cheaper checks remain open from inside the guilt pipeline. A causal test of the combined chain vector, which was composed of the summed decoder directions of 13305, 11883, and 8567, steered together against a same-size random combination, has never been run, and would test whether the chain acts as a genuinely coordinated unit under intervention, and not simply a statistically real structure under observation. Bootstrap confidence intervals exist for the original two features' narrative fire rates, but not yet for the four features discovered later; that data already exists and the resampling itself is cheap. And the somatic Ising fit, run here on four of the six features, still needs 13305 and 11883's somatic vectors merged in to produce the real six-feature matrix. 
 
 Two earlier attempts to replicate Wu et al. (2026)'s concept-subspace methodology directly both failed for the same reason CAA originally failed: a shared carrier sentence diluted the signal being measured, the same dilution bug in a different guise. Their actual method sources concept-set words from genuine human word-association data rather than a fixed template, and a proper attempt at that replication remains undone. 
 
-Finally, a fuller, unsupervised search across a much larger and less hand-curated candidate pool — using something closer to Goodfire's own community-detection approach rather than this project's hand-scoped six-feature fit — would test whether the chain found here is the real shape of guilt's structure in this model, or one visible piece of something larger that a six-feature fit was always going to miss. 
+Finally, a fuller, unsupervised search across a much larger and less hand-curated candidate pool would test whether the chain found here is the real shape of guilt's structure in this model, or one visible piece of something larger that a six-feature fit was always going to miss. Ideally, this would use something closer to Goodfire's own community-detection approach rather than this project's hand-scoped six-feature fit. 
 
 References 
 
@@ -451,7 +451,7 @@ Salovey, P., & Mayer, J.D. (1989-90). Emotional intelligence. Imagination, Cogn
 
 Shu, B., et al. (2026). From Syntax to Emotion. arXiv:2604.25866. 
 
-Sofroniew, N., et al. (2026). Emotion-like Representations in Claude. transformer-circuits.pub/2026/emotions/index.html 
+Sofroniew, N., et al. (2026). Emotion-like Representations in Claude. [transformer-circuits.pub/2026/emotions](https://transformer-circuits.pub/2026/emotions/index.html) 
 
 Tangney, J.P., & Dearing, R.L. (2002). Shame and Guilt. Guilford Press. 
 
