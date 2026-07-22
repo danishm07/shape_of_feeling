@@ -62,11 +62,16 @@ function preprocessHeadings(markdown) {
   const lines = markdown.split('\n');
   const out = [];
 
-  const isMainSection = (t) =>
-    /^(\d+[a-z]?\. (Phase |The Question|Limitations|What's Next))/i.test(t) ||
-    /^Phase \d+:/i.test(t) ||
-    /^10a\./i.test(t) ||
-    /^References$/i.test(t);
+  const isMainSection = (t) => {
+    if (/^References$/i.test(t)) return true;
+    // Numbered section titles: "1. Logit Lens", "0. The Question"
+    // Exclude long procedural steps and code-ish lines ("5. r = cache…")
+    if (!/^\d+[a-z]?\.\s+[A-Z*]/.test(t)) return false;
+    if (t.length > 80) return false;
+    if (/[=@`\[\]]/.test(t)) return false;
+    if (/^\d+\.\s+\w+:\s+.{20,}/.test(t)) return false;
+    return true;
+  };
 
   const isListItem = (t) =>
     /^\d+\.\s+\w/.test(t) &&

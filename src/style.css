@@ -35,10 +35,10 @@ main {
 
 h1, h2, h3, h4, h5, h6 {
   color: #111111;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.25;
   margin-top: 2.25rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.4rem;
 }
 
 h1 {
@@ -48,9 +48,9 @@ h1 {
 }
 
 h2 {
-  font-size: 1.45rem;
-  margin-top: 3rem;
-  padding-top: 0.5rem;
+  font-size: 1.55rem;
+  margin-top: 2rem;
+  padding-top: 0.35rem;
   border-top: 1px solid #7A766C;
 }
 
@@ -61,8 +61,10 @@ main > h2:first-child {
 }
 
 h3 {
-  font-size: 1.15rem;
-  margin-top: 1.75rem;
+  font-size: 1.28rem;
+  margin-top: 1.35rem;
+  margin-bottom: 0.35rem;
+  font-weight: 700;
   color: #111111;
 }
 
